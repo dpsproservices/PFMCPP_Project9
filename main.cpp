@@ -87,7 +87,6 @@ private:
 template<typename T, typename ... Args>
 void variadicHelper(T first, Args&& ... args)
 {
-    //std::cout << "variadicHelper variadic templated" << std::endl;
     Wrapper<T>(std::forward<T>(first)).print(); // #6
     variadicHelper( std::forward<Args>(args) ... ); //recursive call
 }
@@ -96,7 +95,6 @@ void variadicHelper(T first, Args&& ... args)
 template<typename T>
 void variadicHelper(T first)
 {
-    //std::cout << "variadicHelper single template" << std::endl;
     Wrapper<T>(std::forward<T>(first)).print(); // #6
 }
 
