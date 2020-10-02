@@ -52,23 +52,10 @@ private:
 template<typename Type>
 struct Wrapper
 {
-    // Wrapper(Type t) : val(t) { }
-
-    // Wrapper& operator=(Wrapper&& other) // #5
-    // {
-    //     val = std::move(other.val); 
-    //     return *this;       
-    // }
-
     Wrapper(Type&& t) : val(std::move(t)) 
     { 
         std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
     }
-
-    //~Wrapper() { }
-
-    // operator Type() const { return val; }
-    // operator Type&() { return val; }
 
     void print()    // #5
     {
@@ -82,23 +69,10 @@ private:
 template<>
 struct Wrapper<Point>
 {
-    //Wrapper(Point p) : point(p) { }
-
-    // Wrapper& operator=(Wrapper&& other) // #5
-    // {
-    //     point = std::move(other.point); 
-    //     return *this;       
-    // }
-
     Wrapper(Point&& p) : point(std::move(p)) 
     { 
         std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl; 
     }
-
-    //~Wrapper() { }
-
-    //operator Point() const { return point; }
-    //operator Point&() { return point; }
 
     void print()    // #5
     {
@@ -113,7 +87,7 @@ private:
 template<typename T, typename ... Args>
 void variadicHelper(T first, Args&& ... args)
 {
-    std::cout << "variadicHelper variadic templated" << std::endl;
+    //std::cout << "variadicHelper variadic templated" << std::endl;
     Wrapper<T>(std::forward<T>(first)).print(); // #6
     variadicHelper( std::forward<Args>(args) ... ); //recursive call
 }
@@ -122,7 +96,7 @@ void variadicHelper(T first, Args&& ... args)
 template<typename T>
 void variadicHelper(T first)
 {
-    std::cout << "variadicHelper single template" << std::endl;
+    //std::cout << "variadicHelper single template" << std::endl;
     Wrapper<T>(std::forward<T>(first)).print(); // #6
 }
 
