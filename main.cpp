@@ -25,6 +25,7 @@ send me a DM to check your pull request
 #include <string>
 #include <typeinfo>
 #include <memory>
+#include "type_name.h"
 
 struct Point
 {
@@ -54,7 +55,8 @@ struct Wrapper
 {
     Wrapper(Type&& t) : val(std::move(t)) 
     { 
-        std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
+        //std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl;
+        std::cout << "Wrapper(" << type_name<decltype(val)>() << ")" << std::endl;
     }
 
     void print()    // #5
@@ -71,7 +73,8 @@ struct Wrapper<Point>
 {
     Wrapper(Point&& p) : point(std::move(p)) 
     { 
-        std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl; 
+        //std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl; 
+        std::cout << "Wrapper(" << type_name<decltype(point)>() << ")" << std::endl;
     }
 
     void print()    // #5
