@@ -24,6 +24,8 @@ send me a DM to check your pull request
 #include <iostream>
 #include <string>
 #include <typeinfo>
+#include <memory>
+#include "type_name.h"
 
 struct Point
 {
@@ -53,13 +55,53 @@ struct Wrapper
 {
     Wrapper(Type&& t) : val(std::move(t)) 
     { 
-        std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
+        // std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl;
+        std::cout << "Wrapper(" << type_name<decltype(val)>() << ")" << std::endl;
     }
+
+    void print()    // #5
+    {
+        std::cout << "Wrapper::print(" << val << ")" << std::endl;
+    }
+
+private:
+    Type val;
 };
+
+template<>
+struct Wrapper<Point>
+{
+    Wrapper(Point&& p) : point(std::move(p)) 
+    { 
+        // std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl; 
+        std::cout << "Wrapper(" << type_name<decltype(point)>() << ")" << std::endl;
+    }
+
+    void print()    // #5
+    {
+        std::cout << "Wrapper::print(" << point.toString() << ")" << std::endl;
+    }
+
+private:
+    Point point;
+};
+
+// #3
+template<typename T, typename ... Args>
+void variadicHelper(T&& first, Args&& ... args)
+{
+    Wrapper<T>(std::forward<T>(first)).print(); // #6
+    variadicHelper( std::forward<Args>(args) ... ); //recursive call
+}
+
+// #4
+template<typename T>
+void variadicHelper(T&& first)
+{
+    Wrapper<T>(std::forward<T>(first)).print(); // #6
+}
 
 int main()
 {
     variadicHelper( 3, std::string("burgers"), 2.5, Point{3.f, 0.14f} );
 }
-
-
